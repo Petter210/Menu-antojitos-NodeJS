@@ -51,4 +51,57 @@ app.post('/registrar', (req, res) => {
 
 });
 
+// actualizar categorias
+app.put('/actualizar/:id', (req, res) => {
+
+    var id = req.params.id;
+    var body = req.body;
+
+    Categorias.findById(id, (err, categoria) => {
+
+
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                mensaje: 'Error al buscar la categoria',
+                errors: err
+            });
+        }
+
+        if (!categoria) {
+            return res.status(400).json({
+                ok: false,
+                mensaje: 'La categoria con el id ' + id + ' no existe',
+                errors: { message: 'No existe una categoria con ese ID' }
+            });
+        }
+
+
+        categoria.strNombre = body.strNombre;
+        // categoria.usuario = req.usuario._id;
+        categoria.strDesc = body.strDesc;
+
+        categoria.save((err, categoriaGuardado) => {
+
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    mensaje: 'Error al actualizar hospital',
+                    errors: err
+                });
+            }
+
+            res.status(200).json({
+                ok: true,
+                categoria: categoriaGuardado
+            });
+
+        });
+
+    });
+
+});
+
+
+
 module.exports = app;
