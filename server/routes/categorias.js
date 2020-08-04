@@ -23,6 +23,40 @@ app.get('/obtener', function(req, res) {
         })
 });
 
+// obtener por ID
+app.get('/obtener/:id', (req, res) => {
+    let id = req.params.id;
+
+    Categorias.findById(id)
+        .then((data) => {
+
+            if (data.length <= 0) {
+                return res.status(404).json({
+                    ok: true,
+                    status: 404,
+                    msg: 'No hay categorias registradas',
+                    count: data.length,
+                    cont: data
+                });
+            }
+            return res.status(200).json({
+                ok: true,
+                status: 200,
+                msg: 'Se ha consultado correctamente las categorias',
+                count: data.length,
+                cont: data
+            });
+        })
+        .catch((err) => {
+            return res.status(500).json({
+                ok: false,
+                status: 500,
+                msg: 'Error al obtener las categorias.',
+                err: Object.keys(err).length === 0 ? err.message : err
+            });
+        });
+});
+
 // registrar categorías 
 app.post('/registrar', (req, res) => {
 
