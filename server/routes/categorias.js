@@ -136,6 +136,29 @@ app.put('/actualizar/:id', (req, res) => {
 
 });
 
+// eliminar categorias
+app.delete('/eliminar/:id', (req, res) => {
+    let id = req.params.id;
+
+    Categorias.findByIdAndUpdate(id, { blnActivo: false }, { new: true, runValidators: true, context: 'query' }, (err, resp) => {
+
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                status: 400,
+                msg: 'Ha ocurrido un error al desactivar la Categoria',
+                cont: err
+            });
+        }
+        return res.status(200).json({
+            ok: true,
+            status: 200,
+            msg: 'Se ha desactivado exitosamente la Categoria',
+            cont: resp
+        });
+    });
+});
+
 
 
 module.exports = app;
